@@ -1,0 +1,33 @@
+{
+  "name": "Shahar",
+  "version": "1.0.0",
+  "description": "Build your own angular in typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/szimmer1/buildangular-ts"
+  },
+  "author": "Shahar Zimmerman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/szimmer1/buildangular-ts/issues"
+  },
+  "homepage": "https://github.com/szimmer1/buildangular-ts",
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {
+    "gulp-debug": "^2.1.2",
+    "gulp-inject": "^3.0.0",
+    "gulp-rimraf": "^0.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^3.3.0",
+    "gulp-typescript": "^2.9.2",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.10",
+    "karma-jasmine": "^0.3.6"
+  }
+}
