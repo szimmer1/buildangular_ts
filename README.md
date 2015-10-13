@@ -7,8 +7,14 @@ Based on [Tero Parviainen's] (http://teropa.info/) book [Build Your Own Angular]
 To Build
 ------
 
-    npm install -g gulp
+    npm install -g gulp tsd
     npm install
+    tsd install
     gulp compile
+
+Run unit tests
+-------
+
+    gulp test
 
 Authored by Shahar Zimmerman
