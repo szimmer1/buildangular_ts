@@ -1,3 +1,5 @@
+var Scope = require('../js/Scope.js').Scope;
+
 describe('Scope', function() {
 
     it('should make a Scope object', function() {

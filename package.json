@@ -20,6 +20,8 @@
     "gulp": "^3.9.0"
   },
   "devDependencies": {
+    "brfs": "^1.4.1",
+    "gulp-browserify": "^0.5.1",
     "gulp-debug": "^2.1.2",
     "gulp-inject": "^3.0.0",
     "gulp-rimraf": "^0.2.0",
@@ -28,7 +30,9 @@
     "gulp-typescript": "^2.9.2",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.10",
+    "karma-browserify": "^4.4.0",
     "karma-jasmine": "^0.3.6",
+    "lodash": "^3.10.1",
     "tsd": "^0.6.5"
   }
 }

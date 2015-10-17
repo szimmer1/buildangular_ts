@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     Config = require('./gulpfile.config'),
     sourcemaps = require('gulp-sourcemaps'),
     exec = require('child_process').exec,
+    browserify = require('gulp-browserify'),
     ts = require('gulp-typescript');
 
 var config = new Config();
@@ -13,7 +14,8 @@ gulp.task('compile', function() {
         .pipe(sourcemaps.init())
         .pipe(ts({
             noImplicitAny: true,
-            sourceMaps: true
+            sourceMaps: true,
+            module: 'commonjs'
         }));
 
     tsObj.dts.pipe(gulp.dest(config.tsOutputPath));

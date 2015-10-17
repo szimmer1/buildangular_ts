@@ -9,12 +9,15 @@ To Build
 
     npm install -g gulp tsd
     npm install
-    tsd install
+    tsd reinstall
     gulp compile
 
 Run unit tests
 -------
 
-    gulp test
+    npm install -g karma
+    gulp compile
+    karma start
+
 
 Authored by Shahar Zimmerman

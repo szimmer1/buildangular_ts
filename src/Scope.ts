@@ -2,6 +2,8 @@
 
 'use strict';
 
+import _ = require('lodash');
+
 interface WatchFn {
     (scope: Scope): void;
 }
@@ -17,7 +19,7 @@ interface WatchObj {
     last: any;
 }
 
-class Scope {
+export class Scope {
     /**
      * Class members
      */
@@ -51,7 +53,7 @@ class Scope {
         self.$$watchers.forEach(function(watcher) {
             oldVal = watcher.last;
             newVal = watcher.watchFn(self);
-            if (oldVal !== newVal) {
+            if (!self.$$areEqual(oldVal, newVal, watcher.valueEq)) {
                 watcher.last = newVal;
                 watcher.listenerFn(newVal,
                     (oldVal !== oldVal ? newVal : oldVal),
