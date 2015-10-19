@@ -19,17 +19,34 @@ interface WatchObj {
     last: any;
 }
 
+interface EvalFn {
+    (scope: Scope, passThrough?: any): any;
+}
+
+interface EvalObj {
+    scope : Scope;
+    expr : any;
+}
+
+interface ApplyFn {
+    (scope: Scope): void;
+}
+
 export class Scope {
     /**
      * Class members
      */
     private $$watchers : WatchObj[];
+    private $$watchInitFn : () => void;
+    private $$asyncQueue : EvalObj[];
 
     /**
      * Ctor
      */
     constructor() {
         this.$$watchers = [];
+        this.$$asyncQueue = [];
+        this.$$watchInitFn = function() {};
     }
 
     /**
@@ -40,7 +57,7 @@ export class Scope {
             return _.isEqual(val1,val2);
         }
         else {
-            return val1 === val2;
+            return val1 === val2 || (val1 !== val1 && val2 !== val2); // accounts for case val1 = val2 = NaN
         }
     }
 
@@ -54,9 +71,9 @@ export class Scope {
             oldVal = watcher.last;
             newVal = watcher.watchFn(self);
             if (!self.$$areEqual(oldVal, newVal, watcher.valueEq)) {
-                watcher.last = newVal;
+                watcher.last = watcher.valueEq ? _.cloneDeep(newVal) : newVal;
                 watcher.listenerFn(newVal,
-                    (oldVal !== oldVal ? newVal : oldVal),
+                    (oldVal === self.$$watchInitFn ? newVal : oldVal),
                         self);
                 dirty = true;
             }
@@ -69,11 +86,13 @@ export class Scope {
      * Public fns
      */
     $watch(watchFn : WatchFn, listenerFn : ListenerFn, valueEq?: boolean) : void {
+        var self = this;
+
         var watcher: WatchObj = {
             watchFn: watchFn,
             listenerFn: listenerFn || function() {},
             valueEq: !!valueEq,
-            last: NaN
+            last: self.$$watchInitFn
         };
 
         this.$$watchers.push(watcher);
@@ -83,8 +102,30 @@ export class Scope {
         var TTL: number = 10;
         var dirty: boolean;
         do {
+            while (this.$$asyncQueue.length > 0) {
+                var asyncTask = this.$$asyncQueue.shift();
+                asyncTask.scope.$eval(asyncTask.expr);
+            }
             if (TTL < 1) throw new Error("$digest TTL reached");
             dirty = this.$$digestOnce();
         } while (dirty && TTL--);
+    }
+
+    $eval(evalFn : EvalFn, passThrough? : any) : any {
+        var self = this;
+
+        return evalFn(self,passThrough);
+    }
+
+    $evalAsync(expr : any) : void {
+        this.$$asyncQueue.push({scope: this, expr: expr})
+    }
+
+    $apply(applyFn : ApplyFn) : void {
+        try {
+            this.$eval(applyFn);
+        } finally {
+            this.$digest();
+        }
     }
 }
